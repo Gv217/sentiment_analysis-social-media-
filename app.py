@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+import random
 from sentiment_analyzer import analyze_sentiment
 from instagram_scraper import scrape_post_comments
 
@@ -48,6 +49,24 @@ def api_analyze_post_url():
         elif avg_compound <= -0.05: overall_label = "Negative"
         else: overall_label = "Neutral"
 
+        # Calculate Percentages
+        pos_pct = round((pos_count / num_comments) * 100) if num_comments > 0 else 0
+        neu_pct = round((neu_count / num_comments) * 100) if num_comments > 0 else 0
+        neg_pct = round((neg_count / num_comments) * 100) if num_comments > 0 else 0
+
+        # Predict Virality / Views (Mock Logic)
+        # Highly positive or highly negative posts tend to go more viral.
+        virality_multiplier = 1.0 + abs(avg_compound)
+        base_views = random.randint(10000, 50000)
+        predicted_views = int(base_views * virality_multiplier)
+
+        if predicted_views > 80000:
+            virality_status = "High Viral Potential 🔥"
+        elif predicted_views > 40000:
+            virality_status = "Good Reach 📈"
+        else:
+            virality_status = "Average Reach 📉"
+
         return jsonify({
             "url": post_data['url'],
             "shortcode": post_data['shortcode'],
@@ -58,6 +77,15 @@ def api_analyze_post_url():
                     "positive": pos_count,
                     "neutral": neu_count,
                     "negative": neg_count
+                },
+                "percentages": {
+                    "positive": pos_pct,
+                    "neutral": neu_pct,
+                    "negative": neg_pct
+                },
+                "virality": {
+                    "predicted_views": predicted_views,
+                    "status": virality_status
                 }
             },
             "comments": analyzed_comments

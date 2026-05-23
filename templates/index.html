@@ -48,11 +48,22 @@
                             <div>
                                 <h3>Post Analyzed</h3>
                                 <p>Shortcode: <span id="res-shortcode" style="color: var(--ig-orange);">unknown</span></p>
+                                <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);">
+                                    <span style="color: var(--pos-color);">Positive: <span id="res-pos-pct">0</span>%</span> &nbsp;|&nbsp; 
+                                    <span style="color: var(--neu-color);">Neutral: <span id="res-neu-pct">0</span>%</span> &nbsp;|&nbsp; 
+                                    <span style="color: var(--neg-color);">Negative: <span id="res-neg-pct">0</span>%</span>
+                                </p>
                             </div>
                         </div>
                         <div class="profile-aggregate">
                             <div class="badge" id="res-overall-label">Neutral</div>
-                            <p>Audience Sentiment Score: <strong id="res-avg-score">0.0</strong></p>
+                            <p>Sentiment Score: <strong id="res-avg-score">0.0</strong></p>
+                            
+                            <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: right;">
+                                <p style="font-size: 0.8rem; color: var(--text-secondary);">Predicted Reach</p>
+                                <strong id="res-predicted-views" style="font-size: 1.2rem; color: #fff;">0 Views</strong>
+                                <p id="res-virality-status" style="font-size: 0.85rem; margin-top: 4px;"></p>
+                            </div>
                         </div>
                     </div>
 

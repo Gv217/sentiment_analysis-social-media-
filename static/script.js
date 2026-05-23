@@ -58,11 +58,31 @@ async function analyzePostUrl() {
 function displayUrlResult(data) {
     document.getElementById('res-shortcode').textContent = data.shortcode;
     
+    // Update labels and score
     const overallLabel = document.getElementById('res-overall-label');
     overallLabel.textContent = data.aggregate.overall_label;
     overallLabel.className = `badge ${data.aggregate.overall_label.toLowerCase()}`;
     
     document.getElementById('res-avg-score').textContent = data.aggregate.average_score.toFixed(3);
+
+    // Update percentages
+    document.getElementById('res-pos-pct').textContent = data.aggregate.percentages.positive;
+    document.getElementById('res-neu-pct').textContent = data.aggregate.percentages.neutral;
+    document.getElementById('res-neg-pct').textContent = data.aggregate.percentages.negative;
+
+    // Update predicted views
+    document.getElementById('res-predicted-views').textContent = data.aggregate.virality.predicted_views.toLocaleString() + " Views";
+    
+    const viralityStatus = document.getElementById('res-virality-status');
+    viralityStatus.textContent = data.aggregate.virality.status;
+    
+    if (data.aggregate.virality.status.includes('High Viral')) {
+        viralityStatus.style.color = '#f58529'; // Orange fire color
+    } else if (data.aggregate.virality.status.includes('Good Reach')) {
+        viralityStatus.style.color = '#2ecc71'; // Green
+    } else {
+        viralityStatus.style.color = '#95a5a6'; // Gray
+    }
 
     renderChart(data.aggregate.distribution);
 
