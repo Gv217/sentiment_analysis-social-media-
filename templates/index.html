@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer Audience Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-glow"></div>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <h1>Influencer<span>Insights</span></h1>
+            </div>
+            <p>Real-time Instagram brand health and audience sentiment analysis.</p>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('auth')">Connect Instagram</button>
+                <button class="tab-btn" onclick="switchTab('profile')">Scan Profile</button>
+                <button class="tab-btn" onclick="switchTab('single-post')">Analyze Post</button>
+            </div>
+
+            <!-- Auth Tab -->
+            <div id="auth" class="tab-content active">
+                <div class="card glassmorphism">
+                    <h2>Connect Your Instagram Account</h2>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">
+                        Instagram blocks anonymous scanning of profiles. Securely log in with your influencer account to authenticate the scraper. Your credentials are used locally to establish a session and are never stored.
+                    </p>
+                    <div class="input-group">
+                        <span class="at-symbol">👤</span>
+                        <input type="text" id="login-username" placeholder="Instagram Username">
+                    </div>
+                    <div class="input-group">
+                        <span class="at-symbol">🔒</span>
+                        <input type="password" id="login-password" placeholder="Instagram Password">
+                    </div>
+                    <button class="btn primary-btn" onclick="loginInstagram()">Connect Account</button>
+                    
+                    <div id="login-loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <span>Authenticating with Instagram...</span>
+                    </div>
+                    
+                    <div id="login-success" class="hidden" style="margin-top: 1rem; color: var(--pos-color); font-weight: bold; text-align: center;">
+                        ✅ Account successfully connected! You can now scan profiles.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Scanner Tab -->
+            <div id="profile" class="tab-content hidden">
+                <div class="card glassmorphism">
+                    <h2>Analyze Audience Sentiment</h2>
+                    <div class="input-group">
+                        <span class="at-symbol">@</span>
+                        <input type="text" id="profile-input" placeholder="public_username">
+                    </div>
+                    <button class="btn primary-btn" onclick="analyzeProfile()">Scan Profile</button>
+                    <div id="profile-loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <span id="loading-text">Fetching live data from Instagram...</span>
+                    </div>
+                </div>
+
+                <div id="profile-result" class="result-container hidden">
+                    <div class="profile-header card">
+                        <div class="profile-info">
+                            <div class="avatar"></div>
+                            <div>
+                                <h3 id="res-username">@username</h3>
+                                <p><span id="res-followers">0</span> Followers</p>
+                            </div>
+                        </div>
+                        <div class="profile-aggregate">
+                            <div class="badge" id="res-overall-label">Neutral</div>
+                            <p>Brand Health Score: <strong id="res-avg-score">0.0</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card chart-card">
+                            <h3>Sentiment Distribution</h3>
+                            <canvas id="sentimentChart"></canvas>
+                        </div>
+                        <div class="card posts-list-card">
+                            <h3>Recent Posts</h3>
+                            <div class="posts-list" id="posts-list">
+                                <!-- Posts dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Single Post Tab -->
+            <div id="single-post" class="tab-content hidden">
+                <div class="card glassmorphism">
+                    <h2>Analyze a Single Caption</h2>
+                    <textarea id="caption-input" placeholder="Paste an Instagram caption here... e.g., 'Loving the new setup! Everything looks so clean. 😍 #tech'"></textarea>
+                    <button class="btn primary-btn" onclick="analyzePost()">Analyze Sentiment</button>
+                    <div id="post-loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <span>Processing NLP pipeline...</span>
+                    </div>
+                </div>
+
+                <div id="post-result" class="result-container hidden">
+                    <div class="card result-card">
+                        <h3>Result</h3>
+                        <div class="badge" id="post-label">Positive</div>
+                        <div class="scores">
+                            <div class="score-item">
+                                <span class="label">Compound</span>
+                                <span class="value" id="post-compound">0.0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="label">Positive</span>
+                                <span class="value text-green" id="post-pos">0.0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="label">Neutral</span>
+                                <span class="value text-gray" id="post-neu">0.0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="label">Negative</span>
+                                <span class="value text-red" id="post-neg">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
